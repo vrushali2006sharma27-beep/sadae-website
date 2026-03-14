@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SADAE — Shop All</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream: #f5f0e8;
+  --sand: #e8dfd0;
+  --charcoal: #1a1a1a;
+  --warm-gray: #8a8279;
+  --accent: #c4a882;
+  --white: #faf9f7;
+}
+
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--charcoal);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom Cursor ── */
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--charcoal);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.3s, height 0.3s, background 0.3s;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid var(--charcoal);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  opacity: 0.6;
+}
+
+/* ── Header ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 60px;
+  background: rgba(250,249,247,0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  transition: padding 0.4s ease;
+}
+header.compact { padding: 16px 60px; }
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 400;
+  letter-spacing: 8px;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+nav { display: flex; gap: 36px; align-items: center; }
+nav a {
+  text-decoration: none;
+  font-size: 11px; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  transition: color 0.3s ease;
+  position: relative;
+}
+nav a::after {
+  content: ''; position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+nav a:hover::after { width: 100%; }
+nav a:hover, nav a.active { color: var(--charcoal); }
+nav a.active::after { width: 100%; background: var(--charcoal); }
+
+/* ── Page Hero Banner ── */
+.page-hero {
+  padding: 160px 60px 80px;
+  background: var(--charcoal);
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: 'SHOP';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 260px; font-weight: 300;
+  color: rgba(255,255,255,0.03);
+  letter-spacing: 30px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.page-hero-label {
+  font-size: 10px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 16px;
+  opacity: 0; animation: fadeUp 0.7s ease forwards 0.2s;
+}
+.page-hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px; font-weight: 300;
+  color: white; line-height: 1;
+  opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s;
+}
+.page-hero-title em { font-style: italic; color: var(--accent); }
+.page-hero-sub {
+  margin-top: 18px;
+  font-size: 12px; letter-spacing: 1px; line-height: 2;
+  color: rgba(255,255,255,0.4); max-width: 420px;
+  opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex; gap: 10px; align-items: center;
+  margin-top: 40px;
+  opacity: 0; animation: fadeUp 0.7s ease forwards 0.7s;
+}
+.breadcrumb a, .breadcrumb span {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+}
+.breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.3s; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb .sep { color: rgba(255,255,255,0.15); }
+.breadcrumb span { color: rgba(255,255,255,0.7); }
+
+/* ── Products Section ── */
+.section-products {
+  padding: 80px 60px 120px;
+  background: var(--white);
+}
+
+/* Toolbar: filter + count */
+.products-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--sand);
+}
+
+.filter-group {
+  display: flex;
+  gap: 6px;
+}
+.filter-btn {
+  padding: 9px 22px;
+  border: 1px solid var(--sand);
+  background: transparent;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  cursor: none;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.filter-btn:hover { border-color: var(--charcoal); color: var(--charcoal); }
+.filter-btn.active {
+  background: var(--charcoal); color: white; border-color: var(--charcoal);
+}
+
+.product-count {
+  font-size: 11px; letter-spacing: 1px;
+  color: var(--warm-gray);
+}
+.product-count strong {
+  color: var(--charcoal); font-weight: 500;
+}
+
+/* ── Product Grid ── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.product-card {
+  position: relative; overflow: hidden;
+  cursor: none; background: var(--sand);
+  animation: fadeUp 0.6s ease forwards;
+}
+.product-card.hidden { display: none; }
+
+.product-card img {
+  width: 100%; height: 480px;
+  object-fit: cover; display: block;
+  transition: transform 0.7s ease, filter 0.5s ease;
+  filter: brightness(0.95);
+}
+.product-card:hover img {
+  transform: scale(1.04); filter: brightness(0.82);
+}
+
+.product-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 28px 24px;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+  transform: translateY(65px);
+  transition: transform 0.4s ease;
+}
+.product-card:hover .product-overlay { transform: translateY(0); }
+
+.product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 400;
+  color: white; margin-bottom: 4px;
+}
+.product-price {
+  font-size: 11px; letter-spacing: 1px;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 16px;
+}
+.btn-add {
+  display: inline-block;
+  padding: 10px 22px;
+  background: white; color: var(--charcoal);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  border: none; cursor: none;
+  transition: background 0.3s, color 0.3s;
+}
+.btn-add:hover { background: var(--accent); color: white; }
+
+/* Labels */
+.product-tag {
+  position: absolute; top: 18px; left: 18px;
+  background: var(--accent); color: white;
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 5px 12px;
+}
+.style-badge {
+  position: absolute; top: 18px; right: 18px;
+  padding: 4px 10px;
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; color: white;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.style-badge.western  { background: rgba(26,26,26,0.6); }
+.style-badge.traditional { background: rgba(138,85,30,0.65); }
+
+/* No results */
+.no-results {
+  display: none; text-align: center;
+  padding: 80px 20px; grid-column: 1/-1;
+}
+.no-results p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 300;
+  font-style: italic; color: var(--warm-gray);
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--charcoal);
+  color: rgba(255,255,255,0.5);
+  padding: 60px 60px 30px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.footer-brand .logo { color: white; display: block; margin-bottom: 20px; }
+.footer-desc {
+  font-size: 12px; line-height: 2.2;
+  color: rgba(255,255,255,0.35); max-width: 260px;
+}
+.footer-col h4 {
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 20px;
+}
+.footer-col a {
+  display: block; font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none; margin-bottom: 10px;
+  transition: color 0.3s; letter-spacing: 0.5px;
+}
+.footer-col a:hover { color: var(--accent); }
+.footer-bottom {
+  display: flex; justify-content: space-between;
+  align-items: center; padding-top: 30px;
+}
+.footer-copy { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.2); }
+.footer-social { display: flex; gap: 20px; }
+.footer-social a {
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  text-decoration: none; transition: color 0.3s;
+}
+.footer-social a:hover { color: var(--accent); }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes filterIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes filterOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Header -->
+<header id="header">
+  <a href="index.html" class="logo">SADAE</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html" class="active">Shop</a>
+    <a href="#">Collections</a>
+    <a href="#">About</a>
+    <a href="#" class="nav-cart">Cart (0)</a>
+  </nav>
+</header>
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="page-hero-label">The Collection</div>
+  <h1 class="page-hero-title">Shop <em>All</em></h1>
+  <p class="page-hero-sub">Handpicked pieces across Western and Indian Traditional styles — crafted with intention, made to last.</p>
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">—</span>
+    <span>Shop</span>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section-products">
+
+  <!-- Toolbar -->
+  <div class="products-toolbar reveal">
+    <div class="filter-group">
+      <button class="filter-btn active" data-filter="all">All Pieces</button>
+      <button class="filter-btn" data-filter="western">Western</button>
+      <button class="filter-btn" data-filter="traditional">Traditional</button>
+    </div>
+    <p class="product-count" id="productCount">Showing <strong>5</strong> pieces</p>
+  </div>
+
+  <!-- Grid -->
+  <div class="product-grid" id="productGrid">
+
+    <!-- Western 1 -->
+    <div class="product-card" data-style="western">
+      <span class="product-tag">New</span>
+      <span class="style-badge western">Western</span>
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700&q=80" alt="Minimal T-Shirt">
+      <div class="product-overlay">
+        <div class="product-name">Minimal T-Shirt</div>
+        <div class="product-price">₹999 — Premium Pima Cotton</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Western 2 -->
+    <div class="product-card" data-style="western">
+      <span class="style-badge western">Western</span>
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Classic Hoodie">
+      <div class="product-overlay">
+        <div class="product-name">Classic Hoodie</div>
+        <div class="product-price">₹1,999 — French Terry</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Western 3 -->
+    <div class="product-card" data-style="western">
+      <span class="style-badge western">Western</span>
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80" alt="Relaxed Linen Shirt">
+      <div class="product-overlay">
+        <div class="product-name">Relaxed Linen Shirt</div>
+        <div class="product-price">₹1,499 — Linen Blend</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Traditional 1 -->
+    <div class="product-card" data-style="traditional">
+      <span class="product-tag" style="background:#8a5520;">Exclusive</span>
+      <span class="style-badge traditional">Traditional</span>
+      <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=700&q=80" alt="Heritage Kurta">
+      <div class="product-overlay">
+        <div class="product-name">Heritage Kurta</div>
+        <div class="product-price">₹2,199 — Handwoven Khadi</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Traditional 2 -->
+    <div class="product-card" data-style="traditional">
+      <span class="style-badge traditional">Traditional</span>
+      <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&q=80" alt="Bandhgala Jacket">
+      <div class="product-overlay">
+        <div class="product-name">Bandhgala Jacket</div>
+        <div class="product-price">₹3,499 — Silk Blend</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="no-results" id="noResults">
+      <p>No pieces found in this category.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">SADAE</a>
+      <p class="footer-desc">Timeless simplicity. Modern style. Crafted with intention for the ones who know.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="products.html">All Pieces</a>
+      <a href="products.html?filter=western">Western</a>
+      <a href="products.html?filter=traditional">Traditional</a>
+      <a href="#">Sale</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Sustainability</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Shipping</a>
+      <a href="#">Returns</a>
+      <a href="#">Size Guide</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 SADAE. All Rights Reserved.</span>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Cursor ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top  = mouseY + 'px';
+});
+(function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top  = ringY + 'px';
+  requestAnimationFrame(animateRing);
+})();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width  = '16px'; cursor.style.height = '16px';
+    cursor.style.background = 'var(--accent)';
+    ring.style.width  = '50px'; ring.style.height = '50px';
+    ring.style.opacity = '0.3';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width  = '8px'; cursor.style.height = '8px';
+    cursor.style.background = 'var(--charcoal)';
+    ring.style.width  = '32px'; ring.style.height = '32px';
+    ring.style.opacity = '0.6';
+  });
+});
+
+// ── Header compact on scroll ──
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('compact', window.scrollY > 40);
+});
+
+// ── Scroll reveal ──
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+reveals.forEach(r => revealObs.observe(r));
+
+// ── Product Filter ──
+const filterBtns   = document.querySelectorAll('.filter-btn');
+const productCards = document.querySelectorAll('.product-card');
+const countEl      = document.getElementById('productCount');
+const noResults    = document.getElementById('noResults');
+
+function applyFilter(filter) {
+  let visible = 0;
+  productCards.forEach(card => {
+    const match = filter === 'all' || card.dataset.style === filter;
+    if (match) {
+      card.classList.remove('hidden');
+      card.style.animation = 'none';
+      requestAnimationFrame(() => { card.style.animation = 'filterIn 0.4s ease forwards'; });
+      visible++;
+    } else {
+      card.style.animation = 'filterOut 0.28s ease forwards';
+      setTimeout(() => card.classList.add('hidden'), 260);
+    }
+  });
+  setTimeout(() => {
+    const label = filter === 'all' ? 'pieces' : `${filter} pieces`;
+    countEl.innerHTML = `Showing <strong>${visible}</strong> ${label}`;
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+  }, 150);
+}
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter(btn.dataset.filter);
+  });
+});
+
+// ── Deep-link: products.html?filter=western ──
+const params = new URLSearchParams(window.location.search);
+const deepFilter = params.get('filter');
+if (deepFilter) {
+  const target = document.querySelector(`.filter-btn[data-filter="${deepFilter}"]`);
+  if (target) { target.click(); }
+}
+</script>
+</body>
+</html>
