@@ -410,6 +410,102 @@ header.scrolled .nav-cart { color: var(--warm-gray) !important; }
   padding: 5px 12px;
 }
 
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-btn {
+  padding: 9px 22px;
+  border: 1px solid var(--sand);
+  background: transparent;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  cursor: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.filter-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--charcoal);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+.filter-btn:hover { color: var(--charcoal); border-color: var(--charcoal); }
+.filter-btn.active {
+  background: var(--charcoal);
+  color: white;
+  border-color: var(--charcoal);
+}
+
+/* Product count */
+.product-count {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--warm-gray);
+  margin-top: -10px;
+  margin-bottom: 40px;
+  transition: opacity 0.3s;
+}
+
+/* Product grid — 5 cards with featured first */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  transition: all 0.4s ease;
+}
+.product-grid .product-card:first-child {
+  grid-column: span 1;
+}
+
+/* Filter hide/show */
+.product-card {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.product-card.hidden {
+  display: none;
+}
+
+/* Style badges */
+.style-badge {
+  position: absolute;
+  top: 20px; right: 20px;
+  padding: 4px 10px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: white;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.style-badge.western { background: rgba(26,26,26,0.6); }
+.style-badge.traditional { background: rgba(138, 85, 30, 0.65); }
+
+/* No results message */
+.no-results {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+  grid-column: 1 / -1;
+}
+.no-results p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--warm-gray);
+}
+
 /* Editorial Strip */
 .editorial {
   display: grid;
@@ -678,8 +774,8 @@ footer {
 <header id="header">
   <a href="#" class="logo">SADAE</a>
   <nav>
-    <a href="#">Home</a>
-    <a href="#">Shop</a>
+    <a href="index.html">Home</a>
+    <a href="products.html">Shop</a>
     <a href="#">Collections</a>
     <a href="#">About</a>
     <a href="#" class="nav-cart">Cart (0)</a>
@@ -731,12 +827,22 @@ footer {
       <div class="section-label">Curated for You</div>
       <h2 class="section-title">New Arrivals</h2>
     </div>
-    <a href="#" class="section-link">View All Pieces</a>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="western">Western</button>
+      <button class="filter-btn" data-filter="traditional">Traditional</button>
+      <a href="products.html" class="section-link" style="margin-left:16px;">View All →</a>
+    </div>
   </div>
 
-  <div class="product-grid">
-    <div class="product-card reveal">
+  <p class="product-count reveal" id="productCount">Showing 5 pieces</p>
+
+  <div class="product-grid" id="productGrid">
+
+    <!-- Western 1 -->
+    <div class="product-card reveal" data-style="western">
       <span class="product-tag">New</span>
+      <span class="style-badge western">Western</span>
       <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700&q=80" alt="Minimal T-Shirt">
       <div class="product-overlay">
         <div class="product-name">Minimal T-Shirt</div>
@@ -744,7 +850,10 @@ footer {
         <button class="btn-add">Add to Cart</button>
       </div>
     </div>
-    <div class="product-card reveal reveal-delay-1">
+
+    <!-- Western 2 -->
+    <div class="product-card reveal reveal-delay-1" data-style="western">
+      <span class="style-badge western">Western</span>
       <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Classic Hoodie">
       <div class="product-overlay">
         <div class="product-name">Classic Hoodie</div>
@@ -752,14 +861,45 @@ footer {
         <button class="btn-add">Add to Cart</button>
       </div>
     </div>
-    <div class="product-card reveal reveal-delay-2">
-      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80" alt="Relaxed Shirt">
+
+    <!-- Western 3 -->
+    <div class="product-card reveal reveal-delay-2" data-style="western">
+      <span class="style-badge western">Western</span>
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80" alt="Relaxed Linen Shirt">
       <div class="product-overlay">
-        <div class="product-name">Relaxed Shirt</div>
+        <div class="product-name">Relaxed Linen Shirt</div>
         <div class="product-price">₹1,499 — Linen Blend</div>
         <button class="btn-add">Add to Cart</button>
       </div>
     </div>
+
+    <!-- Traditional 1 -->
+    <div class="product-card reveal reveal-delay-1" data-style="traditional">
+      <span class="product-tag" style="background:#8a5520;">Exclusive</span>
+      <span class="style-badge traditional">Traditional</span>
+      <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=700&q=80" alt="Heritage Kurta">
+      <div class="product-overlay">
+        <div class="product-name">Heritage Kurta</div>
+        <div class="product-price">₹2,199 — Handwoven Khadi</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Traditional 2 -->
+    <div class="product-card reveal reveal-delay-2" data-style="traditional">
+      <span class="style-badge traditional">Traditional</span>
+      <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&q=80" alt="Bandhgala Jacket">
+      <div class="product-overlay">
+        <div class="product-name">Bandhgala Jacket</div>
+        <div class="product-price">₹3,499 — Silk Blend</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="no-results" id="noResults">
+      <p>No pieces found in this category.</p>
+    </div>
+
   </div>
 </section>
 
@@ -897,6 +1037,56 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.12 });
 reveals.forEach(r => observer.observe(r));
+
+// Product Filter
+const filterBtns = document.querySelectorAll('.filter-btn');
+const productCards = document.querySelectorAll('.product-card');
+const productCount = document.getElementById('productCount');
+const noResults = document.getElementById('noResults');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+
+    // Update active button
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/hide cards with animation
+    let visible = 0;
+    productCards.forEach(card => {
+      const match = filter === 'all' || card.dataset.style === filter;
+      if (match) {
+        card.classList.remove('hidden');
+        card.style.animation = 'filterIn 0.4s ease forwards';
+        visible++;
+      } else {
+        card.style.animation = 'filterOut 0.3s ease forwards';
+        setTimeout(() => card.classList.add('hidden'), 280);
+      }
+    });
+
+    // Update count text
+    const label = filter === 'all' ? 'all pieces' : `${filter} pieces`;
+    setTimeout(() => {
+      productCount.textContent = `Showing ${visible} ${label}`;
+    }, 150);
+
+    // Show/hide no results
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+  });
+});
 </script>
+
+<style>
+@keyframes filterIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes filterOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
+</style>
 </body>
 </html>
