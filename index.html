@@ -3,229 +3,900 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SADAE Clothing</title>
+<title>SADAE — Timeless Simplicity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family: Arial, sans-serif;
+:root {
+  --cream: #f5f0e8;
+  --sand: #e8dfd0;
+  --charcoal: #1a1a1a;
+  --warm-gray: #8a8279;
+  --accent: #c4a882;
+  --white: #faf9f7;
 }
 
-body{
-background:#f9f9f9;
-color:#333;
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--white);
+  color: var(--charcoal);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom Cursor */
+.cursor {
+  width: 8px;
+  height: 8px;
+  background: var(--charcoal);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+}
+.cursor-ring {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--charcoal);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  opacity: 0.6;
+}
+body:hover .cursor { opacity: 1; }
 
 /* Header */
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 60px;
-background:white;
-box-shadow:0 2px 10px rgba(0,0,0,0.05);
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 60px;
+  mix-blend-mode: normal;
+  transition: background 0.5s ease, padding 0.4s ease;
+}
+header.scrolled {
+  background: rgba(250, 249, 247, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 18px 60px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
 }
 
-.logo{
-font-size:28px;
-font-weight:bold;
-letter-spacing:3px;
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 8px;
+  color: white;
+  transition: color 0.5s ease;
+  text-decoration: none;
 }
+header.scrolled .logo { color: var(--charcoal); }
 
-nav a{
-margin-left:25px;
-text-decoration:none;
-color:#333;
-font-weight:500;
+nav {
+  display: flex;
+  gap: 36px;
+  align-items: center;
 }
+nav a {
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  transition: color 0.3s ease;
+  position: relative;
+}
+header.scrolled nav a { color: var(--warm-gray); }
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+nav a:hover::after { width: 100%; }
+nav a:hover { color: var(--charcoal) !important; }
+
+.nav-cart {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.85) !important;
+  transition: color 0.5s ease !important;
+}
+header.scrolled .nav-cart { color: var(--warm-gray) !important; }
 
 /* Hero */
-
-.hero{
-height:80vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-text-align:center;
-background:linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),
-url("https://images.unsplash.com/photo-1520975661595-6453be3f7070");
-background-size:cover;
-background-position:center;
-color:white;
+.hero {
+  height: 100vh;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
 }
 
-.hero h1{
-font-size:60px;
-letter-spacing:6px;
+.hero-left {
+  background: var(--charcoal);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 60px;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero p{
-margin-top:15px;
-font-size:20px;
+.hero-left::before {
+  content: 'SADAE';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 200px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.03);
+  letter-spacing: 20px;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
-.hero button{
-margin-top:25px;
-padding:12px 30px;
-border:none;
-background:black;
-color:white;
-font-size:16px;
-cursor:pointer;
+.hero-tag {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.3s;
 }
 
-/* Products */
-
-.products{
-padding:60px;
-text-align:center;
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  font-weight: 300;
+  line-height: 1.0;
+  color: white;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.5s;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
 }
 
-.products h2{
-margin-bottom:40px;
-font-size:32px;
+.hero-desc {
+  margin-top: 24px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  line-height: 2;
+  color: rgba(255,255,255,0.5);
+  max-width: 340px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.7s;
 }
 
-.product-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
+.hero-actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.9s;
 }
 
-.product{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
+.btn-primary {
+  display: inline-block;
+  padding: 14px 36px;
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.btn-primary:hover { background: #b8956d; transform: translateY(-1px); }
+
+.btn-ghost {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 2px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  cursor: none;
+}
+.btn-ghost:hover { color: white; border-color: white; }
+
+.hero-right {
+  position: relative;
+  overflow: hidden;
+}
+.hero-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transform: scale(1.05);
+  animation: slowZoom 12s ease-in-out infinite alternate;
+  filter: brightness(0.92);
 }
 
-.product img{
-width:100%;
-border-radius:10px;
+.hero-overlay-text {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  text-align: right;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 1.1s;
+}
+.hero-overlay-text span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: white;
+  line-height: 2;
 }
 
-.product h3{
-margin-top:10px;
+/* Marquee */
+.marquee-strip {
+  background: var(--charcoal);
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-inner {
+  display: inline-flex;
+  animation: marquee 20s linear infinite;
+}
+.marquee-inner span {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin: 0 30px;
+}
+.marquee-inner span.dot {
+  color: var(--accent);
+  letter-spacing: 0;
+  margin: 0 15px;
 }
 
-.product p{
-margin:8px 0;
+/* New Arrivals */
+.section-arrivals {
+  padding: 100px 60px;
+  background: var(--white);
 }
 
-.product button{
-padding:10px 20px;
-border:none;
-background:black;
-color:white;
-cursor:pointer;
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
 }
 
-/* About */
-
-.about{
-padding:60px;
-background:white;
-text-align:center;
+.section-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
 }
 
-.about h2{
-margin-bottom:20px;
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1.1;
 }
+
+.section-link {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  text-decoration: none;
+  border-bottom: 1px solid var(--sand);
+  padding-bottom: 3px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.section-link:hover { color: var(--charcoal); border-color: var(--charcoal); }
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2px;
+}
+
+.product-card {
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  background: var(--sand);
+}
+
+.product-card:first-child {
+  grid-row: 1;
+}
+
+.product-card img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s ease, filter 0.5s ease;
+  filter: brightness(0.95);
+}
+.product-card:first-child img { height: 100%; }
+.product-card:hover img {
+  transform: scale(1.04);
+  filter: brightness(0.85);
+}
+
+.product-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 30px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  transform: translateY(60px);
+  transition: transform 0.4s ease;
+}
+.product-card:hover .product-overlay { transform: translateY(0); }
+
+.product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 4px;
+}
+.product-price {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 16px;
+}
+.btn-add {
+  display: inline-block;
+  padding: 10px 22px;
+  background: white;
+  color: var(--charcoal);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  transition: background 0.3s, color 0.3s;
+}
+.btn-add:hover { background: var(--accent); color: white; }
+
+.product-tag {
+  position: absolute;
+  top: 20px; left: 20px;
+  background: var(--accent);
+  color: white;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+}
+
+/* Editorial Strip */
+.editorial {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 60vh;
+}
+
+.editorial-image {
+  position: relative;
+  overflow: hidden;
+}
+.editorial-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8) sepia(0.15);
+  transform: scale(1.02);
+  transition: transform 8s ease;
+}
+.editorial-image:hover img { transform: scale(1.05); }
+
+.editorial-content {
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 70px;
+  position: relative;
+}
+.editorial-content::before {
+  content: '';
+  position: absolute;
+  top: 60px; left: 70px;
+  width: 40px; height: 1px;
+  background: var(--accent);
+}
+
+.editorial-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  font-weight: 300;
+  color: var(--sand);
+  line-height: 1;
+  margin-bottom: -20px;
+}
+
+.editorial-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.editorial-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.editorial-text {
+  font-size: 12px;
+  line-height: 2.2;
+  color: var(--warm-gray);
+  max-width: 400px;
+  margin-bottom: 36px;
+}
+
+/* Testimonial */
+.testimonials {
+  background: var(--charcoal);
+  padding: 100px 60px;
+  text-align: center;
+}
+
+.testimonials .section-label { color: var(--accent); }
+
+.quote-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 100px;
+  color: rgba(255,255,255,0.06);
+  line-height: 0.5;
+  margin-bottom: 30px;
+}
+
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  font-style: italic;
+  color: white;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.5;
+}
+
+.quote-author {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Newsletter */
+.newsletter {
+  background: var(--cream);
+  padding: 100px 60px;
+  text-align: center;
+}
+
+.newsletter .section-title { margin-bottom: 16px; }
+
+.newsletter p {
+  font-size: 13px;
+  color: var(--warm-gray);
+  letter-spacing: 0.5px;
+  line-height: 2;
+  margin-bottom: 40px;
+}
+
+.newsletter-form {
+  display: flex;
+  max-width: 480px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--charcoal);
+}
+.newsletter-form input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 14px 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--charcoal);
+}
+.newsletter-form input::placeholder { color: var(--warm-gray); }
+.newsletter-form button {
+  background: none;
+  border: none;
+  padding: 14px 0 14px 20px;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  cursor: none;
+  transition: color 0.3s;
+}
+.newsletter-form button:hover { color: var(--accent); }
 
 /* Footer */
-
-footer{
-background:black;
-color:white;
-text-align:center;
-padding:25px;
-margin-top:40px;
+footer {
+  background: var(--charcoal);
+  color: rgba(255,255,255,0.5);
+  padding: 60px 60px 30px;
 }
 
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-brand .logo {
+  color: white;
+  display: block;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.footer-desc {
+  font-size: 12px;
+  line-height: 2.2;
+  color: rgba(255,255,255,0.35);
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 20px;
+}
+
+.footer-col a {
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.3s;
+  letter-spacing: 0.5px;
+}
+.footer-col a:hover { color: var(--accent); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+}
+
+.footer-copy {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.2);
+}
+
+.footer-social {
+  display: flex;
+  gap: 20px;
+}
+.footer-social a {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-social a:hover { color: var(--accent); }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slowZoom {
+  from { transform: scale(1.05); }
+  to { transform: scale(1.12); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
 </style>
 </head>
-
 <body>
 
-<header>
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-<div class="logo">SADAE</div>
-
-<nav>
-<a href="#">Home</a>
-<a href="#">Shop</a>
-<a href="#">Collections</a>
-<a href="#">About</a>
-<a href="#">Contact</a>
-</nav>
-
+<!-- Header -->
+<header id="header">
+  <a href="#" class="logo">SADAE</a>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">Collections</a>
+    <a href="#">About</a>
+    <a href="#" class="nav-cart">Cart (0)</a>
+  </nav>
 </header>
 
-
+<!-- Hero -->
 <section class="hero">
-
-<h1>SADAE</h1>
-<p>Timeless Simplicity. Modern Style.</p>
-<button>Shop Now</button>
-
+  <div class="hero-left">
+    <div class="hero-tag">New Collection 2026</div>
+    <h1 class="hero-title">Wear the<br><em>Silence</em></h1>
+    <p class="hero-desc">Where simplicity meets intention. Every piece crafted for those who believe that less, worn well, is everything.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Explore Collection</a>
+      <a href="#" class="btn-ghost">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="SADAE Hero">
+    <div class="hero-overlay-text">
+      <span>SS — 2026</span>
+      <span>Premium Fabrics</span>
+    </div>
+  </div>
 </section>
 
-
-<section class="products">
-
-<h2>New Arrivals</h2>
-
-<div class="product-grid">
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab">
-<h3>Minimal T-Shirt</h3>
-<p>₹999</p>
-<button>Add to Cart</button>
+<!-- Marquee -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span>New Arrivals</span><span class="dot">✦</span>
+    <span>Premium Cotton</span><span class="dot">✦</span>
+    <span>Timeless Cuts</span><span class="dot">✦</span>
+    <span>Free Shipping Over ₹2999</span><span class="dot">✦</span>
+    <span>Sustainable Fabrics</span><span class="dot">✦</span>
+    <span>Made in India</span><span class="dot">✦</span>
+    <span>New Arrivals</span><span class="dot">✦</span>
+    <span>Premium Cotton</span><span class="dot">✦</span>
+    <span>Timeless Cuts</span><span class="dot">✦</span>
+    <span>Free Shipping Over ₹2999</span><span class="dot">✦</span>
+    <span>Sustainable Fabrics</span><span class="dot">✦</span>
+    <span>Made in India</span><span class="dot">✦</span>
+  </div>
 </div>
 
-<div class="product">
-<img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d">
-<h3>Classic Hoodie</h3>
-<p>₹1999</p>
-<button>Add to Cart</button>
-</div>
+<!-- Products -->
+<section class="section-arrivals">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Curated for You</div>
+      <h2 class="section-title">New Arrivals</h2>
+    </div>
+    <a href="#" class="section-link">View All Pieces</a>
+  </div>
 
-<div class="product">
-<img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f">
-<h3>Relaxed Shirt</h3>
-<p>₹1499</p>
-<button>Add to Cart</button>
-</div>
-
-</div>
-
+  <div class="product-grid">
+    <div class="product-card reveal">
+      <span class="product-tag">New</span>
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700&q=80" alt="Minimal T-Shirt">
+      <div class="product-overlay">
+        <div class="product-name">Minimal T-Shirt</div>
+        <div class="product-price">₹999 — Premium Pima Cotton</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Classic Hoodie">
+      <div class="product-overlay">
+        <div class="product-name">Classic Hoodie</div>
+        <div class="product-price">₹1,999 — French Terry</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80" alt="Relaxed Shirt">
+      <div class="product-overlay">
+        <div class="product-name">Relaxed Shirt</div>
+        <div class="product-price">₹1,499 — Linen Blend</div>
+        <button class="btn-add">Add to Cart</button>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-<section class="about">
-
-<h2>About SADAE</h2>
-
-<p>
-SADAE is a modern clothing brand focused on minimal fashion,
-premium fabrics, and timeless style. Our goal is to create
-comfortable and elegant clothing for everyday life.
-</p>
-
+<!-- Editorial Strip -->
+<section class="editorial">
+  <div class="editorial-image">
+    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80" alt="About SADAE">
+  </div>
+  <div class="editorial-content reveal">
+    <div class="editorial-number">01</div>
+    <div class="editorial-label">Our Philosophy</div>
+    <h2 class="editorial-title">About<br>SADAE</h2>
+    <p class="editorial-text">
+      SADAE is a modern clothing brand rooted in the belief that elegance doesn't shout. We create minimal fashion with premium fabrics and timeless silhouettes — pieces that age like fine things age, with quiet grace.
+      <br><br>
+      Every stitch is an act of intention. Every fabric chosen with care. Every garment built to be worn a thousand times.
+    </p>
+    <a href="#" class="btn-primary">Discover More</a>
+  </div>
 </section>
 
+<!-- Testimonial -->
+<section class="testimonials">
+  <div class="section-label reveal">What People Say</div>
+  <div class="quote-mark reveal">"</div>
+  <p class="quote-text reveal">"SADAE pieces feel like they were made specifically for me — the fit, the fabric, the way they hold their shape. I haven't found anything quite like it."</p>
+  <div class="quote-author reveal">— Priya M., Mumbai</div>
+</section>
 
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="section-label reveal">Stay Connected</div>
+  <h2 class="section-title reveal">Join the Inner Circle</h2>
+  <p class="reveal">Early access to new drops, private sales, and stories from behind the studio.<br>No noise. Just signal.</p>
+  <div class="newsletter-form reveal">
+    <input type="email" placeholder="Your email address">
+    <button type="submit">Subscribe →</button>
+  </div>
+</section>
+
+<!-- Footer -->
 <footer>
-
-<p>© 2026 SADAE. All Rights Reserved.</p>
-
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">SADAE</a>
+      <p class="footer-desc">Timeless simplicity. Modern style. Crafted with intention for the ones who know.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="#">New Arrivals</a>
+      <a href="#">T-Shirts</a>
+      <a href="#">Hoodies</a>
+      <a href="#">Shirts</a>
+      <a href="#">Sale</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Sustainability</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Shipping</a>
+      <a href="#">Returns</a>
+      <a href="#">Size Guide</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 SADAE. All Rights Reserved.</span>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
 </footer>
 
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '16px';
+    cursor.style.height = '16px';
+    cursor.style.background = 'var(--accent)';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+    ring.style.opacity = '0.3';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '8px';
+    cursor.style.height = '8px';
+    cursor.style.background = 'var(--charcoal)';
+    ring.style.width = '32px';
+    ring.style.height = '32px';
+    ring.style.opacity = '0.6';
+  });
+});
+
+// Header scroll
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(r => observer.observe(r));
+</script>
 </body>
 </html>
